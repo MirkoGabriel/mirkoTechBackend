@@ -14,6 +14,8 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     pago = models.CharField(max_length=100)
+    contacto = models.CharField(max_length=100,blank=True)
+    domicilio = models.CharField(max_length=100,blank=True)
 
 class Stock(models.Model):
     nombreCategoria = models.CharField(max_length=100, unique=True)

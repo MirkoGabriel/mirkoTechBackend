@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import OrdenTrabajo
+from .models import OrdenTrabajo, TareasOT
 from apps.gerente.serializers import ClienteSerializer
 from apps.users.serializers import UserSerializer
 
@@ -13,3 +13,8 @@ class OrdenTrabajoSerializer(serializers.ModelSerializer):
         response['cliente'] = ClienteSerializer(instance.cliente).data
         response['tecnico'] = UserSerializer(instance.tecnico).data
         return response
+
+class TareasOTSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TareasOT
+        fields = '__all__'

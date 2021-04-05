@@ -13,9 +13,15 @@ def user_api_view(request):
         data = {}
         email = request.query_params.get('email')
         password = request.query_params.get('password')
+        kind = request.query_params.get('kind')
         if email!=None and password!=None:
             print(email, password)
             users = models.User.objects.filter(email=email, password=password)
+            if users.exists() == False:
+                data["error"]="Usuario no existe"
+                return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
+        elif kind!=None:
+            users = models.User.objects.filter(kind=kind)
             if users.exists() == False:
                 data["error"]="Usuario no existe"
                 return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
@@ -38,7 +44,7 @@ def user_api_view(request):
             data["error"]="Ingrese kind A:Administrador, V:Vendedor, T:tecnico, G:Gerente"
             return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
         #return Response(user_serializer.errors)
-
+        
 @api_view(['GET','PUT','DELETE'])
 def user_detail_view(request, pk):
     if request.method == 'GET':

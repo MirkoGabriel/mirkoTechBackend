@@ -10,7 +10,16 @@ from .. import serializers
 @api_view(['GET', 'POST'])
 def producto_api_view(request):
     if request.method == 'GET':
-        producto = models.Productos.objects.all()
+        data = {}
+        categoria = request.query_params.get('categoria')
+        if categoria!=None:
+            print(categoria)
+            producto = models.Productos.objects.filter(categoria__nombreCategoria=categoria)
+            if producto.exists() == False:
+                data["error"]="Producto no existe"
+                return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            producto = models.Productos.objects.all()
         producto_serializer = serializers.ProductosSerializer(producto, many=True)
         return Response(producto_serializer.data)
     elif request.method == 'POST':
