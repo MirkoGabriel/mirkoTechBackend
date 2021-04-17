@@ -26,7 +26,7 @@ def user_api_view(request):
                 data["error"]="Usuario no existe"
                 return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
         else:
-            users = models.User.objects.all()
+            users = models.User.objects.all()[:10]
         user_serializer = serializers.UserSerializer(users, many=True)
         return Response(user_serializer.data)
     elif request.method == 'POST':

@@ -6,31 +6,41 @@ from django.http import HttpResponse
 from .. import models
 from .. import serializers
 
+
 @api_view(['GET', 'POST'])
 def equipoModel_api_view(request):
     if request.method == 'GET':
-        equipoModel = models.EquipoModel.objects.all()
-        equipo_serializer = serializers.EquipoModelSerializer(equipoModel, many=True)
+        data = {}
+        marca = request.query_params.get('marca')
+        if marca != None:
+            equipoModel = models.EquipoModel.objects.filter(marca__id=marca)
+            if equipoModel.exists() == False:
+                data["error"] = "cliente no existe"
+                return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            equipoModel = models.EquipoModel.objects.all()[:10]
+        equipo_serializer = serializers.EquipoModelSerializer(
+            equipoModel, many=True)
         return Response(equipo_serializer.data)
     elif request.method == 'POST':
         data = {}
-        equipo_serializer = serializers.EquipoModelSerializer(data = request.data)
+        equipo_serializer = serializers.EquipoModelSerializer(
+            data=request.data)
         if equipo_serializer.is_valid():
             equipo_serializer.save()
             return Response(equipo_serializer.data)
         else:
-            data["error"]="Usuario existente"
-            return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
-        
+            data["error"] = "Usuario existente"
+            return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET','DELETE'])
+
+@api_view(['GET', 'DELETE'])
 def equipoModel_detail_view(request, pk):
     if request.method == 'GET':
-        equipoModel = models.EquipoModel.objects.filter(id = pk).first()
+        equipoModel = models.EquipoModel.objects.filter(id=pk).first()
         equipo_serializer = serializers.EquipoModelSerializer(equipoModel)
         return Response(equipo_serializer.data)
     elif request.method == 'DELETE':
-        equipoModel = models.EquipoModel.objects.filter(id = pk).first()
+        equipoModel = models.EquipoModel.objects.filter(id=pk).first()
         equipoModel.delete()
         return Response('Eliminado')
-        

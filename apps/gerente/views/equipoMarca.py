@@ -9,7 +9,7 @@ from .. import serializers
 @api_view(['GET', 'POST'])
 def equipoMarca_api_view(request):
     if request.method == 'GET':
-        equipoMarca = models.EquipoMarca.objects.all()
+        equipoMarca = models.EquipoMarca.objects.all()[:10]
         equipo_serializer = serializers.EquipoMarcaSerializer(equipoMarca, many=True)
         return Response(equipo_serializer.data)
     elif request.method == 'POST':

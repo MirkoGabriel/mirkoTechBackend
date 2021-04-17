@@ -10,7 +10,7 @@ from .. import serializers
 @api_view(['GET', 'POST'])
 def stock_api_view(request):
     if request.method == 'GET':
-        categoria = models.Stock.objects.all()
+        categoria = models.Stock.objects.all()[:10]
         categoria_serializer = serializers.StockSerializer(categoria, many=True)
         return Response(categoria_serializer.data)
     elif request.method == 'POST':
