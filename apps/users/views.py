@@ -32,7 +32,7 @@ def user_api_view(request):
     elif request.method == 'POST':
         kind = request.data.get("kind")
         data = {}
-        if kind =='A' or kind =='V' or kind=='G' or kind=='T':
+        if kind =='A' or kind=='G' or kind=='T':
             user_serializer = serializers.UserSerializer(data = request.data)
             if user_serializer.is_valid():
                 user_serializer.save()
@@ -43,7 +43,6 @@ def user_api_view(request):
         else:
             data["error"]="Ingrese kind A:Administrador, T:tecnico, G:Gerente"
             return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
-        #return Response(user_serializer.errors)
         
 @api_view(['GET','PUT','DELETE'])
 def user_detail_view(request, pk):
