@@ -41,7 +41,7 @@ def user_api_view(request):
                 data["error"]="Usuario existente"
                 return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
         else:
-            data["error"]="Ingrese kind A:Administrador, V:Vendedor, T:tecnico, G:Gerente"
+            data["error"]="Ingrese kind A:Administrador, T:tecnico, G:Gerente"
             return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
         #return Response(user_serializer.errors)
         
