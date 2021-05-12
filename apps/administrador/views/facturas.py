@@ -38,9 +38,14 @@ def factura_api_view(request):
 @api_view(['GET','PUT','DELETE'])
 def factura_detail_view(request, pk):
     if request.method == 'GET':
+        data = {}
         factura = models.Factura.objects.filter(id = pk).first()
-        factura_serializer = serializers.FacturaSerializer(factura)
-        return Response(factura_serializer.data)
+        if factura == None:
+            data["error"]="tarea no existe"
+            return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            factura_serializer = serializers.FacturaSerializer(factura)
+            return Response(factura_serializer.data)
     elif request.method == 'PUT':
         factura = models.Factura.objects.filter(id = pk).first()
         factura_serializer = serializers.FacturaSerializer(factura, data=request.data)

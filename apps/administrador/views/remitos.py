@@ -38,9 +38,14 @@ def remito_api_view(request):
 @api_view(['GET','PUT','DELETE'])
 def remito_detail_view(request, pk):
     if request.method == 'GET':
+        data = {}
         remito = models.Remito.objects.filter(id = pk).first()
-        remito_serializer = serializers.RemitoSerializer(remito)
-        return Response(remito_serializer.data)
+        if remito == None:
+            data["error"]="tarea no existe"
+            return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            remito_serializer = serializers.RemitoSerializer(remito)
+            return Response(remito_serializer.data)
     elif request.method == 'PUT':
         remito = models.Remito.objects.filter(id = pk).first()
         remito_serializer = serializers.RemitoSerializer(remito, data=request.data)

@@ -59,8 +59,12 @@ def ot_detail_view(request, pk):
     if request.method == 'GET':
         data = {}
         ordenTrabajo = models.OrdenTrabajo.objects.filter(id = pk).first()
-        ordenTrabajo_serializer = serializers.OrdenTrabajoSerializer(ordenTrabajo)
-        return Response(ordenTrabajo_serializer.data)
+        if ordenTrabajo == None:
+            data["error"]="tarea no existe"
+            return Response(data = data, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            ordenTrabajo_serializer = serializers.OrdenTrabajoSerializer(ordenTrabajo)
+            return Response(ordenTrabajo_serializer.data)
     elif request.method == 'PUT':
         ordenTrabajo = models.OrdenTrabajo.objects.filter(id = pk).first()
         ordenTrabajo_serializer = serializers.OrdenTrabajoSerializer(ordenTrabajo, data=request.data)
